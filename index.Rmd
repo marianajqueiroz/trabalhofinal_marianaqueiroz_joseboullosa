@@ -1,12 +1,11 @@
 ---
-title: "AN¡LISE DESCRITIVA DOS CASOS DE HIV E AIDS NOS ⁄LTIMOS 5 ANOS NO BRASIL"
-author: "Mariana Queiroz e JosÈ Boullosa"
+title: "AN√ÅLISE DESCRITIVA DOS CASOS DE HIV E AIDS NOS √öLTIMOS 5 ANOS NO BRASIL"
+author: "Mariana Queiroz e Jos√© Boullosa"
 date: "27 de outubro de 2018"
 output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
 
 lista.de.pacotes = c("tidyverse","lubridate","janitor",
                      "readxl","stringr","repmis","janitor",
@@ -18,30 +17,30 @@ lapply(lista.de.pacotes, require, character.only=T)
 rm(lista.de.pacotes,novos.pacotes)
 gc()
 
-load("banco_final_mjq_jbn.RData")
+load("banco_casos_completos.RData")
 
 ```
 
 ## Objeto:
 
-- A caracterizaÁ„o da epidemia de HIV/Aids no Brasil nos ˙ltimos 5 anos.
+- A caracteriza√ß√£o da epidemia de HIV/Aids no Brasil nos √∫ltimos 5 anos.
 
 ## Objetivo:
 
-#Descrever a distribuiÁ„o dos casos de HIV/Aids no paÌs:
+#Descrever a distribui√ß√£o dos casos de HIV/Aids no pa√≠s:
 
 - Por sexo;
-- Por faixa et·ria;
+- Por faixa et√°ria;
 - Por UF;
-- Por grupo de CD4 na ˙ltima mediÁ„o.
+- Por grupo de CD4 na √∫ltima medi√ß√£o.
 
 ## Contexto:
 
-Atualmente, os jovens (15 a 24 anos de idade) representam 37% de todas as novas infecÁıes por HIV em adultos mundialmente1. Cada dia, mais de 2.500 jovens ficam infectados com o HIV2 e cerca de 5 milhıes de jovens vivem com o HIV3, fazendo com que eles reemerjam como protagonistas da epidemia de HIV/aids. Esta È uma realidade tambÈm para o Brasil, especialmente nas suas grandes cidades. Das novas infecÁıes por HIV no Brasil entre 2013 e 2017, 35% ocorreram em pessoas de 15 a 24 anos de idade
+Atualmente, os jovens (15 a 24 anos de idade) representam 37% de todas as novas infec√ß√µes por HIV em adultos mundialmente1. Cada dia, mais de 2.500 jovens ficam infectados com o HIV2 e cerca de 5 milh√µes de jovens vivem com o HIV3, fazendo com que eles reemerjam como protagonistas da epidemia de HIV/aids. Esta √© uma realidade tamb√©m para o Brasil, especialmente nas suas grandes cidades. Das novas infec√ß√µes por HIV no Brasil entre 2013 e 2017, 35% ocorreram em pessoas de 15 a 24 anos de idade
 
-## MÈtodo:
+## M√©todo:
 
-ExtraÁ„o de dados do banco geral utilizado no MinistÈrio da Sa˙de para elaboraÁ„o dos boletins epidemiolÛgicos, formado por dados secund·rios dos sistemas de notificaÁ„o SINAN e SIM, e dos sistemas internos do Departamento de IST, Aids e Hepatites Virais SICLOM e SISCEL. TransformaÁ„o de vari·veis para formaÁ„o de grupos de an·lise, retirada de duplicidades e de casos com informaÁıes faltantes.
+Extra√ß√£o de dados do banco geral utilizado no Minist√©rio da Sa√∫de para elabora√ß√£o dos boletins epidemiol√≥gicos, formado por dados secund√°rios dos sistemas de notifica√ß√£o SINAN e SIM, e dos sistemas internos do Departamento de IST, Aids e Hepatites Virais SICLOM e SISCEL. Transforma√ß√£o de vari√°veis para forma√ß√£o de grupos de an√°lise, retirada de duplicidades e de casos com informa√ß√µes faltantes.
 
 
 
@@ -112,51 +111,52 @@ banco_casos_completos <- banco_casos_completos %>%
 
 ```
 
-## DistribuiÁ„o de casos por ano de diagnÛstico, por faixa et·ria
+
+
+## Distribui√ß√£o de casos por ano de diagn√≥stico, por faixa et√°ria
 ```{r plot, echo=TRUE}
 banco_casos_completos %>%
   ggplot(aes(x =ano_diagnostico, y = fx_etaria, fill=fx_etaria, color=fx_etaria)) +
   geom_bar(stat = "identity",alpha=0.9) +
   theme_minimal() +
-  labs(y="DistribuiÁ„o por faixa et·ria", x="Ano de diagnÛstico")
+  labs(y="Distribui√ß√£o por faixa et√°ria", x="Ano de diagn√≥stico")
 ```
 
-## DistribuiÁ„o de casos diagnosticados por faixa et·ria e sexo
+## Distribui√ß√£o de casos diagnosticados por faixa et√°ria e sexo
 ```{r}
 banco_casos_completos %>%
   ggplot(aes(x =fx_etaria, y = sexo, color=sexo, fill=sexo)) +
   geom_bar(stat = "identity",alpha=0.9) +
   theme_minimal() +
-  labs(y="DistribuiÁ„o por sexo", x="Faixa et·ria") +
+  labs(y="Distribui√ß√£o por sexo", x="Faixa et√°ria") +
   coord_flip()
 ```
 
-#DistribuiÁ„o de casos por UF de residÍncia e faixa et·ria
+#Distribui√ß√£o de casos por UF de resid√™ncia e faixa et√°ria
 ```{r}
 banco_casos_completos %>%
   ggplot(aes(x = UF2, y = fx_etaria, fill=fx_etaria, color=fx_etaria)) +
   geom_bar(stat = "identity",alpha=0.9) +
   theme_minimal() +
-  labs(y="DistribuiÁ„o por faixa et·ria", x="UF") +
+  labs(y="Distribui√ß√£o por faixa et√°ria", x="UF") +
   theme(axis.text.x = element_text(angle = 45, hjust =1))
 ```
 
-## DistribuiÁ„o de casos por sexo, faixa et·ria e grupo de CD4: grupo 0 equivalente a ˙ltima contagem de CD4 inferior a 350 cÈlulas por mm≥ de sangue e grupo 1, superior. 
+## Distribui√ß√£o de casos por sexo, faixa et√°ria e grupo de CD4: grupo 0 equivalente a √∫ltima contagem de CD4 inferior a 350 c√©lulas por mm¬≥ de sangue e grupo 1, superior. 
 ```{r}
 banco_casos_completos %>%
     ggplot(aes(x = fx_etaria, y = cd4_maior, fill=cd4_maior, color=cd4_maior)) +
     geom_bar(stat = "identity",alpha=0.9) +
     theme_minimal() +
     facet_wrap(~sexo, nrow=2) +
-    labs(y="DistribuiÁ„o por categoria de CD4", x="DistribuiÁ„o por faixa et·ria") +
+    labs(y="Distribui√ß√£o por categoria de CD4", x="Distribui√ß√£o por faixa et√°ria") +
     theme(axis.text.x = element_text(angle = 45, hjust =1))
 ```
 
-## Conclusıes 
+## Conclus√µes 
 
-- O n˙mero de novas infecÁıes foi maior entre homens do que em mulheres nos ˙ltimos 5 anos;
-- As novas infecÁıes ocorreram mais prevalentemente em indivÌduos entre 20 e 39 anos;
-- De acordo com o ˙ltimo exame, a maior parte dos indivÌduos apresenta contagem de CD4 superior a 350 cÈlulas por mm≥ de sangue, o que significa um distanciamento do risco de aids; 
-- Comparando-se mulheres e homens, observa-se um melhor cen·rio proporcional de contagem de CD4 entre as mulheres. 
-- Nas faixas et·rias entre 20 e 34 anos, entre os homens, a proporÁ„o de indivÌduos com CD4 menor que 350 cels/mm≥ È maior que nas demais faixas et·rias.
-
+- O n√∫mero de novas infec√ß√µes foi maior entre homens do que em mulheres nos √∫ltimos 5 anos;
+- As novas infec√ß√µes ocorreram mais prevalentemente em indiv√≠duos entre 20 e 39 anos;
+- De acordo com o √∫ltimo exame, a maior parte dos indiv√≠duos apresenta contagem de CD4 superior a 350 c√©lulas por mm¬≥ de sangue, o que significa um distanciamento do risco de aids; 
+- Comparando-se mulheres e homens, observa-se um melhor cen√°rio proporcional de contagem de CD4 entre as mulheres. 
+- Nas faixas et√°rias entre 20 e 34 anos, entre os homens, a propor√ß√£o de indiv√≠duos com CD4 menor que 350 cels/mm¬≥ √© maior que nas demais faixas et√°rias.
