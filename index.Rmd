@@ -1,12 +1,25 @@
 ---
 title: "ANÁLISE DESCRITIVA DOS CASOS DE HIV E AIDS NOS ÚLTIMOS 5 ANOS NO BRASIL"
-author: "mariana_queiroz_josé_boullosa"
+author: "Mariana Queiroz e José Boullosa"
 date: "27 de outubro de 2018"
 output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+lista.de.pacotes = c("tidyverse","lubridate","janitor",
+                     "readxl","stringr","repmis","janitor",
+                     "survey","srvyr","scales", "ggplot2", "plotly", "gapminder") 
+novos.pacotes <- lista.de.pacotes[!(lista.de.pacotes %in%
+                                      installed.packages()[,"Package"])]
+if(length(novos.pacotes) > 0) {install.packages(novos.pacotes)}
+lapply(lista.de.pacotes, require, character.only=T)
+rm(lista.de.pacotes,novos.pacotes)
+gc()
+
+load("banco_final_mjq_jbn.RData")
+
 ```
 
 ## Objeto:
@@ -32,37 +45,8 @@ Extração de dados do banco geral utilizado no Ministério da Saúde para elaboraçã
 
 
 
-```{r, echo=TRUE}
-banco_casos_completos <- banco_mjq %>% 
-  filter(complete.cases(.))
-
-banco_casos_completos <- banco_casos_completos %>% 
-  rename(cod_pac=BancoRelacionado2017_final.codpacnovo,
-         sim=BancoRelacionado2017_final.sim,
-         causa_obito=BancoRelacionado2017_final.causabas_sim,
-         ano_diagnostico=BancoRelacionado2017_final.anodiag_texto,
-         hierarf=BancoRelacionado2017_final.hierarf,
-         idade=BancoRelacionado2017_final.idade,
-         uf=BancoRelacionado2017_final.ufres,
-         escolaridade=BancoRelacionado2017_final.escolar,
-         raca=BancoRelacionado2017_final.raca,
-         dt_diag=BancoRelacionado2017_final.dtdiag,
-         sexo=BancoRelacionado2017_final.sexo,
-         origem=BancoRelacionado2017_final.origem,
-         dt_nasc=BancoRelacionado2017_final.dtnasc,
-         dt_ult_atu_siscel=BancoRelacionado2017_final.data_ult_atu_siscel,
-         copias_cv=BancoRelacionado2017_final.copias_cv,
-         dt_coleta_cv=BancoRelacionado2017_final.dt_coleta_cv,
-         cd4_menor=BancoRelacionado2017_final.cd4menor,
-         cd4_maior=BancoRelacionado2017_final.cd4maior,
-         grupo_cd4_menor=BancoRelacionado2017_final.grupo_cd4_cd4menor,
-         grupo_cd4_maior=BancoRelacionado2017_final.grupo_cd4_cd4maior,
-         tto=BancoRelacionado2017_final.disp,
-         dt_ult_disp=BancoRelacionado2017_final.dt_dipensa_disp,
-         hiv_aids=V24,
-         ctrl_geral=V25,
-         criterio=V26
-          )
+```{r}
+load("banco_casos_completos.RData")
 
 banco_casos_completos <- banco_casos_completos %>% 
   select(cod_pac,sim,causa_obito,ano_diagnostico,hierarf,idade,uf,escolaridade,raca,
@@ -120,7 +104,7 @@ banco_casos_completos <- banco_casos_completos %>%
     uf==50~"MS",
     uf==51~"MT",
     uf==52~"GO",
-    uf==53~"DF",
+    uf==53~"DF"
     ))
 
 banco_casos_completos <- banco_casos_completos %>% 
@@ -138,7 +122,7 @@ banco_casos_completos %>%
 ```
 
 ## Distribuição de casos diagnosticados por faixa etária e sexo
-```{r plot, echo=TRUE}
+```{r}
 banco_casos_completos %>%
   ggplot(aes(x =fx_etaria, y = sexo, color=sexo, fill=sexo)) +
   geom_bar(stat = "identity",alpha=0.9) +
